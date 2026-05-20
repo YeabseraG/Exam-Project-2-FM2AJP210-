@@ -1,4 +1,5 @@
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+const API_KEY = import.meta.env.VITE_NOROFF_API_KEY;
 
 export async function apiFetch<T>(
   endpoint: string,
@@ -10,6 +11,9 @@ export async function apiFetch<T>(
     ...options,
     headers: {
       "Content-Type": "application/json",
+      ...(API_KEY && {
+        "X-Noroff-API-Key": API_KEY,
+      }),
       ...(token && {
         Authorization: `Bearer ${token}`,
       }),
@@ -17,9 +21,14 @@ export async function apiFetch<T>(
     },
   });
 
+  const data = await response.json();
+
   if (!response.ok) {
-    throw new Error("Something went wrong");
+    const message =
+      data?.errors?.[0]?.message || data?.message || "Something went wrong";
+
+    throw new Error(message);
   }
 
-  return response.json();
+  return data;
 }
