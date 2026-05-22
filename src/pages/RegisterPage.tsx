@@ -32,6 +32,23 @@ function RegisterPage() {
   ) {
     event.preventDefault();
 
+    if (!formData.email.endsWith("@stud.noroff.no")) {
+      setError("Email must be a valid @stud.noroff.no address.");
+      return;
+    }
+
+    if (formData.password.length < 8) {
+      setError("Password must be at least 8 characters.");
+      return;
+    }
+
+    if (!/^[a-zA-Z0-9_]+$/.test(formData.name)) {
+      setError(
+        "Name can only contain letters, numbers, and underscores.",
+      );
+      return;
+    }
+
     setError("");
     setLoading(true);
 

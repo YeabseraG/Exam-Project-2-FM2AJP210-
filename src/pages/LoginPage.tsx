@@ -16,7 +16,9 @@ function LoginPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
+  function handleChange(
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) {
     const { name, value } = event.target;
 
     setFormData((prev) => ({
@@ -25,8 +27,20 @@ function LoginPage() {
     }));
   }
 
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(
+    event: React.FormEvent<HTMLFormElement>,
+  ) {
     event.preventDefault();
+
+    if (!formData.email.endsWith("@stud.noroff.no")) {
+      setError("Please use your stud.noroff.no email.");
+      return;
+    }
+
+    if (formData.password.length < 8) {
+      setError("Password must be at least 8 characters.");
+      return;
+    }
 
     setError("");
     setLoading(true);
@@ -46,9 +60,15 @@ function LoginPage() {
       navigate("/");
     } catch (error) {
       if (error instanceof Error) {
-        setError(error.message);
+        if (
+          error.message.toLowerCase().includes("invalid")
+        ) {
+          setError("Incorrect email or password.");
+        } else {
+          setError(error.message);
+        }
       } else {
-        setError("Login failed");
+        setError("Login failed.");
       }
     } finally {
       setLoading(false);
@@ -57,11 +77,18 @@ function LoginPage() {
 
   return (
     <section className="mx-auto max-w-md p-6">
-      <h1 className="mb-6 text-3xl font-bold">Login</h1>
+      <h1 className="mb-6 text-3xl font-bold">
+        Login
+      </h1>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form
+        onSubmit={handleSubmit}
+        className="space-y-4"
+      >
         <div>
-          <label className="mb-1 block font-medium">Email</label>
+          <label className="mb-1 block font-medium">
+            Email
+          </label>
 
           <input
             type="email"
@@ -74,7 +101,9 @@ function LoginPage() {
         </div>
 
         <div>
-          <label className="mb-1 block font-medium">Password</label>
+          <label className="mb-1 block font-medium">
+            Password
+          </label>
 
           <input
             type="password"
@@ -86,7 +115,11 @@ function LoginPage() {
           />
         </div>
 
-        {error && <p className="text-red-600">{error}</p>}
+        {error && (
+          <p className="text-red-600">
+            {error}
+          </p>
+        )}
 
         <button
           type="submit"
