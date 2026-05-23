@@ -1,10 +1,11 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 
 import { useAuth } from "../context/AuthContext";
 
 function Navbar() {
   const { user, isLoggedIn, logout } = useAuth();
+  const location = useLocation();
 
   const [mobileMenuOpen, setMobileMenuOpen] =
     useState(false);
@@ -12,6 +13,10 @@ function Navbar() {
   function closeMobileMenu() {
     setMobileMenuOpen(false);
   }
+
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [location.pathname]);
 
   return (
     <header className="border-b border-stone-200 bg-[#fffaf3] shadow-sm">
