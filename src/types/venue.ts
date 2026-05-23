@@ -4,8 +4,20 @@ export interface VenueMedia {
 }
 
 export interface VenueLocation {
-  city: string;
-  country: string;
+  address?: string;
+  city?: string;
+  zip?: string;
+  country?: string;
+  continent?: string;
+  lat?: number;
+  lng?: number;
+}
+
+export interface VenueMeta {
+  wifi: boolean;
+  parking: boolean;
+  breakfast: boolean;
+  pets: boolean;
 }
 
 export interface VenueBooking {
@@ -26,8 +38,8 @@ export interface Venue {
   rating: number;
 
   media: VenueMedia[];
-
   location: VenueLocation;
+  meta?: VenueMeta;
 
   bookings?: VenueBooking[];
 }

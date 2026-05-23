@@ -21,14 +21,20 @@ export async function apiFetch<T>(
     },
   });
 
-  const data = await response.json();
-
   if (!response.ok) {
+    const errorData = await response.json();
+
     const message =
-      data?.errors?.[0]?.message || data?.message || "Something went wrong";
+      errorData?.errors?.[0]?.message ||
+      errorData?.message ||
+      "Something went wrong";
 
     throw new Error(message);
   }
 
-  return data;
+  if (response.status === 204) {
+    return undefined as T;
+  }
+
+  return response.json();
 }
