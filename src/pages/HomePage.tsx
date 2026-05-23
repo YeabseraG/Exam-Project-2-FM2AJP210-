@@ -27,16 +27,12 @@ function HomePage() {
       switch (sortBy) {
         case "price-low":
           return a.price - b.price;
-
         case "price-high":
           return b.price - a.price;
-
         case "rating":
           return b.rating - a.rating;
-
         case "guests":
           return b.maxGuests - a.maxGuests;
-
         case "name":
         default:
           return a.name.localeCompare(b.name);
@@ -49,12 +45,8 @@ function HomePage() {
       try {
         const response = await getVenues();
         setVenues(response.data);
-      } catch (error) {
-        if (error instanceof Error) {
-          setError(error.message);
-        } else {
-          setError("Failed to load venues.");
-        }
+      } catch {
+        setError("Could not load venues right now, Please try again later.");
       } finally {
         setLoading(false);
       }
@@ -82,10 +74,7 @@ function HomePage() {
       </div>
 
       <div className="mb-6">
-        <label
-          htmlFor="venue-search"
-          className="mb-2 block font-medium"
-        >
+        <label htmlFor="venue-search" className="mb-2 block font-medium">
           Search venues
         </label>
 
@@ -93,54 +82,33 @@ function HomePage() {
           id="venue-search"
           type="search"
           value={searchQuery}
-          onChange={(event) =>
-            setSearchQuery(event.target.value)
-          }
+          onChange={(event) => setSearchQuery(event.target.value)}
           placeholder="Search by name, city, country..."
           className="w-full rounded border bg-white p-3"
         />
       </div>
 
       <div className="mb-6">
-        <label
-          htmlFor="venue-sort"
-          className="mb-2 block font-medium"
-        >
+        <label htmlFor="venue-sort" className="mb-2 block font-medium">
           Sort venues
         </label>
 
         <select
           id="venue-sort"
           value={sortBy}
-          onChange={(event) =>
-            setSortBy(event.target.value)
-          }
+          onChange={(event) => setSortBy(event.target.value)}
           className="w-full rounded border bg-white p-3"
         >
           <option value="name">Name A–Z</option>
-
-          <option value="price-low">
-            Price: low to high
-          </option>
-
-          <option value="price-high">
-            Price: high to low
-          </option>
-
-          <option value="rating">
-            Rating: high to low
-          </option>
-
-          <option value="guests">
-            Guests: high to low
-          </option>
+          <option value="price-low">Price: low to high</option>
+          <option value="price-high">Price: high to low</option>
+          <option value="rating">Rating: high to low</option>
+          <option value="guests">Guests: high to low</option>
         </select>
       </div>
 
       {filteredVenues.length === 0 ? (
-        <p className="text-stone-600">
-          No venues matched your search.
-        </p>
+        <p className="text-stone-600">No venues matched your search.</p>
       ) : (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {filteredVenues.map((venue) => (
@@ -152,10 +120,7 @@ function HomePage() {
               {venue.media?.[0]?.url ? (
                 <img
                   src={venue.media[0].url}
-                  alt={
-                    venue.media[0].alt ||
-                    venue.name
-                  }
+                  alt={venue.media[0].alt || venue.name}
                   className="mb-4 h-48 w-full rounded object-cover"
                 />
               ) : (
@@ -164,9 +129,7 @@ function HomePage() {
                 </div>
               )}
 
-              <h2 className="text-xl font-bold">
-                {venue.name}
-              </h2>
+              <h2 className="text-xl font-bold">{venue.name}</h2>
 
               <p className="mt-2 line-clamp-3 text-sm text-stone-600">
                 {venue.description}
@@ -174,23 +137,19 @@ function HomePage() {
 
               <div className="mt-4 space-y-1 text-sm">
                 <p>
-                  <strong>Price:</strong> $
-                  {venue.price}
+                  <strong>Price:</strong> ${venue.price}
                 </p>
 
                 <p>
-                  <strong>Guests:</strong>{" "}
-                  {venue.maxGuests}
+                  <strong>Guests:</strong> {venue.maxGuests}
                 </p>
 
                 <p>
-                  <strong>Rating:</strong>{" "}
-                  {venue.rating}
+                  <strong>Rating:</strong> {venue.rating}
                 </p>
 
                 <p>
-                  <strong>Location:</strong>{" "}
-                  {venue.location?.city},{" "}
+                  <strong>Location:</strong> {venue.location?.city},{" "}
                   {venue.location?.country}
                 </p>
               </div>

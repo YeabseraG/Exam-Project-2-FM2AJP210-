@@ -13,17 +13,17 @@ function VenuePage() {
 
   useEffect(() => {
     async function loadVenue() {
-      if (!id) return;
+      if (!id) {
+        setError("This venue link is missing an ID.");
+        setLoading(false);
+        return;
+      }
 
       try {
         const response = await getVenueById(id);
         setVenue(response.data);
-      } catch (error) {
-        if (error instanceof Error) {
-          setError(error.message);
-        } else {
-          setError("Failed to load venue.");
-        }
+      } catch {
+        setError("Could not load this venue right now, Refresh page or try again later.");
       } finally {
         setLoading(false);
       }
@@ -60,79 +60,60 @@ function VenuePage() {
 
       <h1 className="text-4xl font-bold">{venue.name}</h1>
 
-      <p className="mt-4 text-stone-700">
-        {venue.description}
-      </p>
+      <p className="mt-4 text-stone-700">{venue.description}</p>
 
       <div className="mt-6 grid gap-4 md:grid-cols-2">
         <div className="rounded border bg-white p-4">
-          <h2 className="mb-3 text-xl font-bold">
-            Venue details
-          </h2>
+          <h2 className="mb-3 text-xl font-bold">Venue details</h2>
 
           <p>
-            <strong>Price:</strong> $
-            {venue.price} / night
+            <strong>Price:</strong> ${venue.price} / night
           </p>
 
           <p>
-            <strong>Max guests:</strong>{" "}
-            {venue.maxGuests}
+            <strong>Max guests:</strong> {venue.maxGuests}
           </p>
 
           <p>
-            <strong>Rating:</strong>{" "}
-            {venue.rating}
+            <strong>Rating:</strong> {venue.rating}
           </p>
 
           <p>
-            <strong>Location:</strong>{" "}
-            {venue.location?.city},{" "}
+            <strong>Location:</strong> {venue.location?.city},{" "}
             {venue.location?.country}
           </p>
         </div>
 
         <div className="rounded border bg-white p-4">
-          <h2 className="mb-3 text-xl font-bold">
-            Availability preview
-          </h2>
+          <h2 className="mb-3 text-xl font-bold">Availability preview</h2>
 
-          {venue.bookings &&
-          venue.bookings.length > 0 ? (
+          {venue.bookings && venue.bookings.length > 0 ? (
             <>
               <ul className="space-y-2">
-                {venue.bookings
-                  .slice(0, 3)
-                  .map((booking) => (
-                    <li
-                      key={booking.id}
-                      className="rounded bg-stone-100 p-3 text-sm"
-                    >
-                      <p>
-                        <strong>From:</strong>{" "}
-                        {new Date(
-                          booking.dateFrom,
-                        ).toLocaleDateString()}
-                      </p>
+                {venue.bookings.slice(0, 3).map((booking) => (
+                  <li
+                    key={booking.id}
+                    className="rounded bg-stone-100 p-3 text-sm"
+                  >
+                    <p>
+                      <strong>From:</strong>{" "}
+                      {new Date(booking.dateFrom).toLocaleDateString()}
+                    </p>
 
-                      <p>
-                        <strong>To:</strong>{" "}
-                        {new Date(
-                          booking.dateTo,
-                        ).toLocaleDateString()}
-                      </p>
+                    <p>
+                      <strong>To:</strong>{" "}
+                      {new Date(booking.dateTo).toLocaleDateString()}
+                    </p>
 
-                      <p>
-                        <strong>Guests:</strong>{" "}
-                        {booking.guests}
-                      </p>
-                    </li>
-                  ))}
+                    <p>
+                      <strong>Guests:</strong> {booking.guests}
+                    </p>
+                  </li>
+                ))}
               </ul>
 
               <p className="mt-3 text-sm text-stone-600">
-                Showing 3 of{" "}
-                {venue.bookings.length} bookings.
+                Showing 3 of {venue.bookings.length} bookings.
               </p>
 
               <Link
@@ -145,8 +126,7 @@ function VenuePage() {
           ) : (
             <>
               <p className="text-stone-600">
-                No booked dates yet. This venue
-                is fully available.
+                No booked dates yet. This venue is fully available.
               </p>
 
               <Link

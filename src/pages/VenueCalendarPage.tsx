@@ -11,6 +11,7 @@ function VenueCalendarPage() {
   const { user, isLoggedIn } = useAuth();
 
   const [venue, setVenue] = useState<Venue | null>(null);
+
   const [formData, setFormData] = useState({
     dateFrom: "",
     dateTo: "",
@@ -19,23 +20,26 @@ function VenueCalendarPage() {
 
   const [loading, setLoading] = useState(true);
   const [bookingLoading, setBookingLoading] = useState(false);
+
   const [error, setError] = useState("");
   const [bookingError, setBookingError] = useState("");
   const [bookingSuccess, setBookingSuccess] = useState("");
 
   useEffect(() => {
     async function loadVenue() {
-      if (!id) return;
+      if (!id) {
+        setError("This venue link is missing an ID.");
+        setLoading(false);
+        return;
+      }
 
       try {
         const response = await getVenueById(id);
         setVenue(response.data);
-      } catch (error) {
-        if (error instanceof Error) {
-          setError(error.message);
-        } else {
-          setError("Failed to load availability.");
-        }
+      } catch {
+        setError(
+          "Could not load availability right now. Please try again later.",
+        );
       } finally {
         setLoading(false);
       }
@@ -66,27 +70,43 @@ function VenueCalendarPage() {
     setBookingSuccess("");
 
     if (!isLoggedIn) {
-      setBookingError("You must be logged in to create a booking.");
+      setBookingError(
+        "You need to log in before creating a booking.",
+      );
       return;
     }
 
     if (user?.venueManager) {
-      setBookingError("Venue managers cannot create customer bookings.");
+      setBookingError(
+        "Venue managers cannot create customer bookings.",
+      );
       return;
     }
 
     if (!formData.dateFrom || !formData.dateTo) {
-      setBookingError("Please select both start and end dates.");
+      setBookingError(
+        "Please choose both a start date and an end date.",
+      );
       return;
     }
 
-    if (new Date(formData.dateFrom) >= new Date(formData.dateTo)) {
-      setBookingError("End date must be after start date.");
+    if (
+      new Date(formData.dateFrom) >=
+      new Date(formData.dateTo)
+    ) {
+      setBookingError(
+        "The end date must be after the start date.",
+      );
       return;
     }
 
-    if (formData.guests < 1 || formData.guests > venue.maxGuests) {
-      setBookingError(`Guests must be between 1 and ${venue.maxGuests}.`);
+    if (
+      formData.guests < 1 ||
+      formData.guests > venue.maxGuests
+    ) {
+      setBookingError(
+        `Guest count must be between 1 and ${venue.maxGuests}.`,
+      );
       return;
     }
 
@@ -100,7 +120,9 @@ function VenueCalendarPage() {
         venueId: venue.id,
       });
 
-      setBookingSuccess("Booking created successfully.");
+      setBookingSuccess(
+        "Your booking was created successfully.",
+      );
 
       setFormData({
         dateFrom: "",
@@ -108,14 +130,15 @@ function VenueCalendarPage() {
         guests: 1,
       });
 
-      const updatedVenue = await getVenueById(venue.id);
+      const updatedVenue = await getVenueById(
+        venue.id,
+      );
+
       setVenue(updatedVenue.data);
-    } catch (error) {
-      if (error instanceof Error) {
-        setBookingError(error.message);
-      } else {
-        setBookingError("Failed to create booking.");
-      }
+    } catch {
+      setBookingError(
+        "Could not create your booking right now. Please try again.",
+      );
     } finally {
       setBookingLoading(false);
     }
@@ -152,9 +175,12 @@ function VenueCalendarPage() {
 
       <div className="mt-6 grid gap-4 md:grid-cols-2">
         <div className="rounded border bg-white p-4">
-          <h2 className="mb-4 text-xl font-bold">Booked dates</h2>
+          <h2 className="mb-4 text-xl font-bold">
+            Booked dates
+          </h2>
 
-          {venue.bookings && venue.bookings.length > 0 ? (
+          {venue.bookings &&
+          venue.bookings.length > 0 ? (
             <ul className="space-y-3">
               {venue.bookings.map((booking) => (
                 <li
@@ -163,112 +189,135 @@ function VenueCalendarPage() {
                 >
                   <p>
                     <strong>From:</strong>{" "}
-                    {new Date(booking.dateFrom).toLocaleDateString()}
+                    {new Date(
+                      booking.dateFrom,
+                    ).toLocaleDateString()}
                   </p>
 
                   <p>
                     <strong>To:</strong>{" "}
-                    {new Date(booking.dateTo).toLocaleDateString()}
+                    {new Date(
+                      booking.dateTo,
+                    ).toLocaleDateString()}
                   </p>
 
                   <p>
-                    <strong>Guests:</strong> {booking.guests}
+                    <strong>Guests:</strong>{" "}
+                    {booking.guests}
                   </p>
                 </li>
               ))}
             </ul>
           ) : (
             <p className="text-stone-600">
-              No booked dates yet. This venue is currently fully available.
+              No booked dates yet. This venue is
+              currently fully available.
             </p>
           )}
         </div>
 
         <div className="rounded border bg-white p-4">
-          <h2 className="mb-4 text-xl font-bold">Create booking</h2>
+          <h2 className="mb-4 text-xl font-bold">
+            Create booking
+          </h2>
 
           {!isLoggedIn && (
             <p className="mb-4 text-stone-600">
               You need to{" "}
-              <Link to="/login" className="underline">
+              <Link
+                to="/login"
+                className="underline"
+              >
                 log in
               </Link>{" "}
               to book this venue.
             </p>
           )}
 
-          {isLoggedIn && user?.venueManager && (
-            <p className="mb-4 text-stone-600">
-              Venue managers cannot create customer bookings.
-            </p>
-          )}
+          {isLoggedIn &&
+            user?.venueManager && (
+              <p className="mb-4 text-stone-600">
+                Venue managers cannot create
+                customer bookings.
+              </p>
+            )}
 
-          {isLoggedIn && !user?.venueManager && (
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div>
-                <label className="mb-1 block font-medium">
-                  From
-                </label>
-
-                <input
-                  type="date"
-                  name="dateFrom"
-                  value={formData.dateFrom}
-                  onChange={handleChange}
-                  required
-                  className="w-full rounded border p-3"
-                />
-              </div>
-
-              <div>
-                <label className="mb-1 block font-medium">
-                  To
-                </label>
-
-                <input
-                  type="date"
-                  name="dateTo"
-                  value={formData.dateTo}
-                  onChange={handleChange}
-                  required
-                  className="w-full rounded border p-3"
-                />
-              </div>
-
-              <div>
-                <label className="mb-1 block font-medium">
-                  Guests
-                </label>
-
-                <input
-                  type="number"
-                  name="guests"
-                  min={1}
-                  max={venue.maxGuests}
-                  value={formData.guests}
-                  onChange={handleChange}
-                  required
-                  className="w-full rounded border p-3"
-                />
-              </div>
-
-              {bookingError && (
-                <p className="text-red-600">{bookingError}</p>
-              )}
-
-              {bookingSuccess && (
-                <p className="text-green-700">{bookingSuccess}</p>
-              )}
-
-              <button
-                type="submit"
-                disabled={bookingLoading}
-                className="w-full rounded bg-stone-900 p-3 text-white"
+          {isLoggedIn &&
+            !user?.venueManager && (
+              <form
+                onSubmit={handleSubmit}
+                className="space-y-4"
               >
-                {bookingLoading ? "Creating booking..." : "Create booking"}
-              </button>
-            </form>
-          )}
+                <div>
+                  <label className="mb-1 block font-medium">
+                    From
+                  </label>
+
+                  <input
+                    type="date"
+                    name="dateFrom"
+                    value={formData.dateFrom}
+                    onChange={handleChange}
+                    required
+                    className="w-full rounded border p-3"
+                  />
+                </div>
+
+                <div>
+                  <label className="mb-1 block font-medium">
+                    To
+                  </label>
+
+                  <input
+                    type="date"
+                    name="dateTo"
+                    value={formData.dateTo}
+                    onChange={handleChange}
+                    required
+                    className="w-full rounded border p-3"
+                  />
+                </div>
+
+                <div>
+                  <label className="mb-1 block font-medium">
+                    Guests
+                  </label>
+
+                  <input
+                    type="number"
+                    name="guests"
+                    min={1}
+                    max={venue.maxGuests}
+                    value={formData.guests}
+                    onChange={handleChange}
+                    required
+                    className="w-full rounded border p-3"
+                  />
+                </div>
+
+                {bookingError && (
+                  <p className="text-red-600">
+                    {bookingError}
+                  </p>
+                )}
+
+                {bookingSuccess && (
+                  <p className="text-green-700">
+                    {bookingSuccess}
+                  </p>
+                )}
+
+                <button
+                  type="submit"
+                  disabled={bookingLoading}
+                  className="w-full rounded bg-stone-900 p-3 text-white"
+                >
+                  {bookingLoading
+                    ? "Creating booking..."
+                    : "Create booking"}
+                </button>
+              </form>
+            )}
         </div>
       </div>
     </section>

@@ -13,18 +13,19 @@ function ProfilePage() {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    async function loadProfile() {
-      if (!user?.name) return;
+    if (!user?.name) {
+      setLoading(false);
+      return;
+    }
 
+    const profileName = user.name;
+
+    async function loadProfile() {
       try {
-        const response = await getProfile(user.name);
+        const response = await getProfile(profileName);
         setBookings(response.data.bookings || []);
-      } catch (error) {
-        if (error instanceof Error) {
-          setError(error.message);
-        } else {
-          setError("Failed to load profile.");
-        }
+      } catch {
+        setError("Could not load your profile right now, Please try again.");
       } finally {
         setLoading(false);
       }
@@ -77,15 +78,18 @@ function ProfilePage() {
       </div>
 
       <div className="mt-6 rounded border bg-white p-4">
-        <h2 className="mb-4 text-xl font-bold">Upcoming bookings</h2>
+        <h2 className="mb-4 text-xl font-bold">
+          {user?.venueManager ? "Manager profile" : "Upcoming bookings"}
+        </h2>
 
-        {bookings.length > 0 ? (
+        {user?.venueManager ? (
+          <p className="text-stone-600">
+            Manage your venues from the manager dashboard.
+          </p>
+        ) : bookings.length > 0 ? (
           <ul className="space-y-3">
             {bookings.map((booking) => (
-              <li
-                key={booking.id}
-                className="rounded bg-stone-100 p-4"
-              >
+              <li key={booking.id} className="rounded bg-stone-100 p-4">
                 <p>
                   <strong>Venue:</strong>{" "}
                   {booking.venue?.name || "Venue unavailable"}
