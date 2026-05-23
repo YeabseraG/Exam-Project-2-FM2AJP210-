@@ -1,16 +1,20 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
-import { getProfile } from "../api/profiles";
+import { getProfile, updateProfile } from "../api/profiles";
 import { useAuth } from "../context/AuthContext";
 import type { Booking } from "../types/booking";
 
 function ProfilePage() {
-  const { user, isLoggedIn } = useAuth();
+  const { user, isLoggedIn, login } = useAuth();
 
   const [bookings, setBookings] = useState<Booking[]>([]);
+  const [avatarUrl, setAvatarUrl] = useState(user?.avatar?.url || "");
+  const [showAvatarEditor, setShowAvatarEditor] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [isUpdatingAvatar, setIsUpdatingAvatar] = useState(false);
   const [error, setError] = useState("");
+  const [avatarMessage, setAvatarMessage] = useState("");
 
   useEffect(() => {
     if (!user?.name) {
@@ -24,8 +28,11 @@ function ProfilePage() {
       try {
         const response = await getProfile(profileName);
         setBookings(response.data.bookings || []);
+        setAvatarUrl(response.data.avatar?.url || "");
       } catch {
-        setError("Could not load your profile right now, Please Refresh page or try again later.");
+        setError(
+          "Could not load your profile right now. Please refresh the page or try again later.",
+        );
       } finally {
         setLoading(false);
       }
@@ -33,6 +40,49 @@ function ProfilePage() {
 
     loadProfile();
   }, [user?.name]);
+
+  async function handleAvatarSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    if (!user?.name) return;
+
+    if (!avatarUrl) {
+      setAvatarMessage("Please enter an image URL.");
+      return;
+    }
+
+    setIsUpdatingAvatar(true);
+    setAvatarMessage("");
+
+    try {
+      await updateProfile(user.name, {
+        avatar: {
+          url: avatarUrl,
+          alt: `${user.name}'s profile picture`,
+        },
+      });
+
+      const token = localStorage.getItem("token") || "";
+
+      // should keep local auth state in sync so the new avatar shows immediately
+      login(token, {
+        ...user,
+        avatar: {
+          url: avatarUrl,
+          alt: `${user.name}'s profile picture`,
+        },
+      });
+
+      setAvatarMessage("Profile picture updated.");
+      setShowAvatarEditor(false);
+    } catch {
+      setAvatarMessage(
+        "Could not update your profile picture. Please check the image URL.",
+      );
+    } finally {
+      setIsUpdatingAvatar(false);
+    }
+  }
 
   if (!isLoggedIn) {
     return (
@@ -63,6 +113,51 @@ function ProfilePage() {
       <h1 className="text-3xl font-bold">Your profile</h1>
 
       <div className="mt-4 rounded border bg-white p-4">
+        <button
+          type="button"
+          onClick={() => setShowAvatarEditor((current) => !current)}
+          className="group relative mb-4 block"
+        >
+          {avatarUrl ? (
+            <img
+              src={avatarUrl}
+              alt={`${user?.name}'s profile picture`}
+              className="h-24 w-24 rounded-full object-cover"
+            />
+          ) : (
+            <div className="flex h-24 w-24 items-center justify-center rounded-full bg-stone-300 text-sm text-stone-600">
+              No image
+            </div>
+          )}
+
+          
+          <div className="absolute inset-0 flex items-center justify-center rounded-full bg-black/50 opacity-0 transition group-hover:opacity-100">
+            <span className="text-sm font-medium text-white">Edit</span>
+          </div>
+        </button>
+
+        {showAvatarEditor && (
+          <form onSubmit={handleAvatarSubmit} className="mb-4 space-y-3">
+            <input
+              type="url"
+              value={avatarUrl}
+              onChange={(event) => setAvatarUrl(event.target.value)}
+              placeholder="https://example.com/avatar.jpg"
+              className="w-full rounded border p-3"
+            />
+
+            {avatarMessage && <p className="text-sm">{avatarMessage}</p>}
+
+            <button
+              type="submit"
+              disabled={isUpdatingAvatar}
+              className="rounded bg-stone-900 px-4 py-2 text-white"
+            >
+              {isUpdatingAvatar ? "Updating..." : "Update picture"}
+            </button>
+          </form>
+        )}
+
         <p>
           <strong>Name:</strong> {user?.name}
         </p>
