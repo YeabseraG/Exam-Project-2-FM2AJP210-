@@ -20,6 +20,12 @@ export interface VenueMeta {
   pets: boolean;
 }
 
+export interface VenueCustomer {
+  name: string;
+  email: string;
+  avatar?: VenueMedia;
+}
+
 export interface VenueBooking {
   id: string;
   dateFrom: string;
@@ -27,6 +33,7 @@ export interface VenueBooking {
   guests: number;
   created: string;
   updated: string;
+  customer?: VenueCustomer;
 }
 
 export interface Venue {
