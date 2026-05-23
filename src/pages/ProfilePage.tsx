@@ -25,7 +25,7 @@ function ProfilePage() {
         const response = await getProfile(profileName);
         setBookings(response.data.bookings || []);
       } catch {
-        setError("Could not load your profile right now, Please try again.");
+        setError("Could not load your profile right now, Please Refresh page or try again later.");
       } finally {
         setLoading(false);
       }

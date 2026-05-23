@@ -34,8 +34,9 @@ export interface VenuePayload {
 }
 
 export function getVenues() {
-  return apiFetch<VenuesResponse>("/holidaze/venues");
+  return apiFetch<VenuesResponse>("/holidaze/venues?limit=100&sort=created&sortOrder=desc");
 }
+
 
 export function getVenueById(id: string) {
   return apiFetch<VenueResponse>(`/holidaze/venues/${id}?_bookings=true`);
