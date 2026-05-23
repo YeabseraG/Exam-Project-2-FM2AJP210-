@@ -130,7 +130,7 @@ function ProfilePage() {
             </div>
           )}
 
-          
+
           <div className="absolute inset-0 flex items-center justify-center rounded-full bg-black/50 opacity-0 transition group-hover:opacity-100">
             <span className="text-sm font-medium text-white">Edit</span>
           </div>
@@ -179,8 +179,16 @@ function ProfilePage() {
 
         {user?.venueManager ? (
           <p className="text-stone-600">
-            Manage your venues from the manager dashboard.
+             Manage your venues from the{" "}
+           <Link
+              to="/manager"
+              className="underline"
+           >
+              manager dashboard
+           </Link>
+           .
           </p>
+          
         ) : bookings.length > 0 ? (
           <ul className="space-y-3">
             {bookings.map((booking) => (

@@ -20,7 +20,7 @@ function Navbar() {
           )}
 
           {isLoggedIn && user?.venueManager && (
-            <Link to="/manager">Manager</Link>
+            <Link to="/manager">Manager Dashboard</Link>
           )}
 
           {!isLoggedIn ? (
