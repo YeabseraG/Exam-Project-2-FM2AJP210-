@@ -21,6 +21,22 @@ function isDateBooked(date: Date, bookings: Venue["bookings"] = []) {
   });
 }
 
+function doesBookingOverlap(
+  dateFrom: string,
+  dateTo: string,
+  bookings: Venue["bookings"] = [],
+) {
+  const newStart = new Date(dateFrom);
+  const newEnd = new Date(dateTo);
+
+  return bookings.some((booking) => {
+    const bookedStart = new Date(booking.dateFrom);
+    const bookedEnd = new Date(booking.dateTo);
+
+    return newStart < bookedEnd && newEnd > bookedStart;
+  });
+}
+
 function VenueCalendarPage() {
   const { id } = useParams<{ id: string }>();
   const { user, isLoggedIn } = useAuth();
@@ -154,6 +170,19 @@ function VenueCalendarPage() {
 
     if (new Date(formData.dateFrom) >= new Date(formData.dateTo)) {
       setBookingError("The end date must be after the start date.");
+      return;
+    }
+
+    if (
+      doesBookingOverlap(
+        formData.dateFrom,
+        formData.dateTo,
+        venue.bookings,
+      )
+    ) {
+      setBookingError(
+        "Those dates are already booked. Please choose another available range.",
+      );
       return;
     }
 
