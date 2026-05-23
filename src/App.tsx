@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import HomePage from "./pages/HomePage";
 import VenuePage from "./pages/VenuePage";
+import VenueCalendarPage from "./pages/VenueCalendarPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import ProfilePage from "./pages/ProfilePage";
@@ -17,15 +18,13 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/venues/:id" element={<VenuePage />} />
+          <Route path="/venues/:id/calendar" element={<VenueCalendarPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/manager" element={<ManagerPage />} />
           <Route path="/manager/venues/new" element={<CreateVenuePage />} />
-          <Route
-            path="/manager/venues/:id/edit"
-            element={<EditVenuePage />}
-          />
+          <Route path="/manager/venues/:id/edit" element={<EditVenuePage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </main>

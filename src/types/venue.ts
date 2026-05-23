@@ -1,3 +1,22 @@
+export interface VenueMedia {
+  url: string;
+  alt: string;
+}
+
+export interface VenueLocation {
+  city: string;
+  country: string;
+}
+
+export interface VenueBooking {
+  id: string;
+  dateFrom: string;
+  dateTo: string;
+  guests: number;
+  created: string;
+  updated: string;
+}
+
 export interface Venue {
   id: string;
   name: string;
@@ -6,13 +25,9 @@ export interface Venue {
   maxGuests: number;
   rating: number;
 
-  media: {
-    url: string;
-    alt: string;
-  }[];
+  media: VenueMedia[];
 
-  location: {
-    city: string;
-    country: string;
-  };
+  location: VenueLocation;
+
+  bookings?: VenueBooking[];
 }
