@@ -9,6 +9,7 @@ import RegisterPage from "./pages/RegisterPage";
 import ProfilePage from "./pages/ProfilePage";
 import ManagerPage from "./pages/ManagerPage";
 import CreateVenuePage from "./pages/CreateVenuePage";
+import ManagerVenueBookingsPage from "./pages/ManagerVenueBookingsPage";
 import EditVenuePage from "./pages/EditVenuePage";
 import NotFoundPage from "./pages/NotFoundPage";
 
@@ -28,6 +29,7 @@ function App() {
           <Route path="/manager" element={<ManagerPage />} />
           <Route path="/manager/venues/new" element={<CreateVenuePage />} />
           <Route path="/manager/venues/:id/edit" element={<EditVenuePage />} />
+          <Route path="/manager/venues/:id/bookings" element={<ManagerVenueBookingsPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </main>

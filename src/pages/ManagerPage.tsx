@@ -50,6 +50,7 @@ function ManagerPage() {
     try {
       await deleteVenue(id);
 
+      // this should update the UI immediately so we don't need another fetch after delete
       setVenues((currentVenues) =>
         currentVenues.filter((venue) => venue.id !== id),
       );
@@ -157,7 +158,10 @@ function ManagerPage() {
                 </div>
 
                 <div className="mt-4 flex gap-3">
-                  <Link to={`/venues/${venue.id}`} className="underline">
+                  <Link
+                    to={`/venues/${venue.id}`}
+                    className="underline"
+                  >
                     View
                   </Link>
 
@@ -168,13 +172,24 @@ function ManagerPage() {
                     Edit
                   </Link>
 
+                  <Link
+                    to={`/manager/venues/${venue.id}/bookings`}
+                    className="underline"
+                  >
+                    Bookings
+                  </Link>
+
                   <button
                     type="button"
-                    onClick={() => handleDeleteVenue(venue.id)}
+                    onClick={() =>
+                      handleDeleteVenue(venue.id)
+                    }
                     disabled={isDeleting}
                     className="text-red-600 underline disabled:text-stone-400"
                   >
-                    {isDeleting ? "Deleting..." : "Delete"}
+                    {isDeleting
+                      ? "Deleting..."
+                      : "Delete"}
                   </button>
                 </div>
               </article>
