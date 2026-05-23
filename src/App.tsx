@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
+import Navbar from "./components/Navbar";
 import HomePage from "./pages/HomePage";
 import VenuePage from "./pages/VenuePage";
 import VenueCalendarPage from "./pages/VenueCalendarPage";
@@ -14,6 +15,8 @@ import NotFoundPage from "./pages/NotFoundPage";
 function App() {
   return (
     <BrowserRouter>
+      <Navbar />
+
       <main className="min-h-screen bg-stone-50 text-stone-900">
         <Routes>
           <Route path="/" element={<HomePage />} />
