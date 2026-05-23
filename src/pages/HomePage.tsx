@@ -23,7 +23,6 @@ function HomePage() {
       );
     });
 
-    // Copy before sorting so the filtered array itself isnt messed with
     return [...filtered].sort((a, b) => {
       switch (sortBy) {
         case "price-low":
@@ -84,7 +83,8 @@ function HomePage() {
           </h1>
 
           <p className="mt-5 text-lg leading-relaxed text-stone-100">
-            Discover unique stays, cozy cabins, beachside venues and unforgettable locations with Holidaze.
+            Discover unique stays, cozy cabins, beachside venues and
+            unforgettable locations with Holidaze.
           </p>
         </div>
       </div>
@@ -151,10 +151,22 @@ function HomePage() {
         <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           {filteredVenues.map((venue) => {
             const amenities = [
-              { label: "Wifi", available: venue.meta?.wifi },
-              { label: "Parking", available: venue.meta?.parking },
-              { label: "Breakfast", available: venue.meta?.breakfast },
-              { label: "Pets", available: venue.meta?.pets },
+              {
+                label: "Wifi",
+                available: venue.meta?.wifi,
+              },
+              {
+                label: "Parking",
+                available: venue.meta?.parking,
+              },
+              {
+                label: "Breakfast",
+                available: venue.meta?.breakfast,
+              },
+              {
+                label: "Pets",
+                available: venue.meta?.pets,
+              },
             ].filter((amenity) => amenity.available);
 
             return (
@@ -193,8 +205,9 @@ function HomePage() {
                       </p>
                     </div>
 
-                    <div className="rounded-full bg-[#174e4f] px-3 py-1 text-sm font-semibold text-white">
-                      ★ {venue.rating}
+                    <div className="flex shrink-0 items-center gap-1 rounded-full bg-[#174e4f] px-3 py-1 text-sm font-semibold text-white">
+                      <span>★</span>
+                      <span>{venue.rating}</span>
                     </div>
                   </div>
 

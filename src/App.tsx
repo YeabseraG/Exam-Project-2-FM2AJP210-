@@ -13,6 +13,7 @@ import ManagerVenueBookingsPage from "./pages/ManagerVenueBookingsPage";
 import EditVenuePage from "./pages/EditVenuePage";
 import NotFoundPage from "./pages/NotFoundPage";
 
+
 function App() {
   return (
     <BrowserRouter>
