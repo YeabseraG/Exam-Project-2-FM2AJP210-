@@ -64,7 +64,6 @@ function ProfilePage() {
 
       const token = localStorage.getItem("token") || "";
 
-      // should keep local auth state in sync so the new avatar shows immediately
       login(token, {
         ...user,
         avatar: {
@@ -86,16 +85,30 @@ function ProfilePage() {
 
   if (!isLoggedIn) {
     return (
-      <section className="p-6">
-        <h1 className="text-3xl font-bold">Profile</h1>
+      <section className="mx-auto flex min-h-[calc(100vh-90px)] max-w-6xl items-center px-6 py-10">
+        <div className="w-full rounded-3xl bg-white p-10 shadow-sm">
+          <div className="rounded-3xl bg-[#174e4f] px-8 py-10 text-white">
+            <p className="mb-2 text-sm font-semibold uppercase tracking-[0.2em] text-[#f6d7c3]">
+              Profile access
+            </p>
 
-        <p className="mt-4">
-          You need to{" "}
-          <Link to="/login" className="underline">
-            log in
-          </Link>{" "}
-          to view your profile.
-        </p>
+            <h1 className="text-5xl font-extrabold leading-tight">
+              Your Holidaze profile
+            </h1>
+
+            <p className="mt-4 max-w-2xl text-lg text-stone-100">
+              Log in to manage bookings, update your account and access your
+              venue dashboard.
+            </p>
+
+            <Link
+              to="/login"
+              className="mt-6 inline-block rounded-2xl bg-white px-5 py-3 font-semibold text-[#174e4f]! transition hover:bg-stone-100"
+            >
+              Log in
+            </Link>
+          </div>
+        </div>
       </section>
     );
   }
@@ -109,10 +122,23 @@ function ProfilePage() {
   }
 
   return (
-    <section className="mx-auto max-w-4xl p-6">
-      <h1 className="text-3xl font-bold">Your profile</h1>
+    <section className="mx-auto max-w-6xl px-6 py-10">
+      <div className="mb-10 rounded-3xl bg-[#174e4f] px-8 py-10 text-white shadow-lg">
+        <p className="mb-2 text-sm font-semibold uppercase tracking-[0.2em] text-[#f6d7c3]">
+          Your account
+        </p>
 
-      <div className="mt-4 rounded border bg-white p-4">
+        <h1 className="text-5xl font-extrabold leading-tight">
+          Welcome back, {user?.name}
+        </h1>
+
+        <p className="mt-4 max-w-2xl text-lg text-stone-100">
+          Manage your account, update your profile picture and keep track of
+          your bookings.
+        </p>
+      </div>
+
+      <div className="rounded-3xl bg-white p-6 shadow-sm">
         <button
           type="button"
           onClick={() => setShowAvatarEditor((current) => !current)}
@@ -122,14 +148,13 @@ function ProfilePage() {
             <img
               src={avatarUrl}
               alt={`${user?.name}'s profile picture`}
-              className="h-24 w-24 rounded-full object-cover"
+              className="h-28 w-28 rounded-full border-4 border-[#fffaf3] object-cover shadow-md"
             />
           ) : (
-            <div className="flex h-24 w-24 items-center justify-center rounded-full bg-stone-300 text-sm text-stone-600">
+            <div className="flex h-28 w-28 items-center justify-center rounded-full bg-stone-300 text-sm text-stone-600 shadow-md">
               No image
             </div>
           )}
-
 
           <div className="absolute inset-0 flex items-center justify-center rounded-full bg-black/50 opacity-0 transition group-hover:opacity-100">
             <span className="text-sm font-medium text-white">Edit</span>
@@ -143,7 +168,7 @@ function ProfilePage() {
               value={avatarUrl}
               onChange={(event) => setAvatarUrl(event.target.value)}
               placeholder="https://example.com/avatar.jpg"
-              className="w-full rounded border p-3"
+              className="w-full rounded-2xl border border-stone-300 bg-stone-50 p-3 outline-none transition focus:border-[#174e4f]"
             />
 
             {avatarMessage && <p className="text-sm">{avatarMessage}</p>}
@@ -151,80 +176,112 @@ function ProfilePage() {
             <button
               type="submit"
               disabled={isUpdatingAvatar}
-              className="rounded bg-stone-900 px-4 py-2 text-white"
+              className="rounded-2xl bg-[#174e4f] px-5 py-2.5 font-semibold text-white! transition hover:bg-[#123b3c]"
             >
               {isUpdatingAvatar ? "Updating..." : "Update picture"}
             </button>
           </form>
         )}
 
-        <p>
-          <strong>Name:</strong> {user?.name}
-        </p>
+        <div className="mt-6 grid gap-4 sm:grid-cols-3">
+          <div className="rounded-2xl bg-[#fffaf3] p-4">
+            <p className="text-sm text-stone-500">Name</p>
 
-        <p>
-          <strong>Email:</strong> {user?.email}
-        </p>
+            <p className="mt-1 font-semibold text-stone-800">{user?.name}</p>
+          </div>
 
-        <p>
-          <strong>Role:</strong>{" "}
-          {user?.venueManager ? "Venue Manager" : "Customer"}
-        </p>
+          <div className="rounded-2xl bg-[#fffaf3] p-4">
+            <p className="text-sm text-stone-500">Email</p>
+
+            <p className="mt-1 font-semibold text-stone-800">{user?.email}</p>
+          </div>
+
+          <div className="rounded-2xl bg-[#fffaf3] p-4">
+            <p className="text-sm text-stone-500">Role</p>
+
+            <p className="mt-1 font-semibold text-stone-800">
+              {user?.venueManager ? "Venue Manager" : "Customer"}
+            </p>
+          </div>
+        </div>
       </div>
 
-      <div className="mt-6 rounded border bg-white p-4">
-        <h2 className="mb-4 text-xl font-bold">
+      <div className="mt-6 rounded-3xl bg-white p-6 shadow-sm">
+        <h2 className="mb-4 text-2xl font-bold text-stone-800">
           {user?.venueManager ? "Manager profile" : "Upcoming bookings"}
         </h2>
 
         {user?.venueManager ? (
           <p className="text-stone-600">
-             Manage your venues from the{" "}
-           <Link
+            Manage your venues from the{" "}
+            <Link
               to="/manager"
-              className="underline"
-           >
+              className="font-semibold text-[#174e4f] underline"
+            >
               manager dashboard
-           </Link>
-           .
+            </Link>
+            .
           </p>
-          
         ) : bookings.length > 0 ? (
           <ul className="space-y-3">
             {bookings.map((booking) => (
-              <li key={booking.id} className="rounded bg-stone-100 p-4">
-                <p>
-                  <strong>Venue:</strong>{" "}
-                  {booking.venue?.name || "Venue unavailable"}
-                </p>
+              <li
+                key={booking.id}
+                className="rounded-2xl bg-[#fffaf3] p-5 shadow-sm"
+              >
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
+                  <div className="flex-1">
+                    <p className="text-xl font-bold text-stone-800">
+                      {booking.venue?.name || "Venue unavailable"}
+                    </p>
 
-                <p>
-                  <strong>From:</strong>{" "}
-                  {new Date(booking.dateFrom).toLocaleDateString()}
-                </p>
+                    <div className="mt-3 space-y-1 text-stone-600">
+                      <p>
+                        <strong>From:</strong>{" "}
+                        {new Date(booking.dateFrom).toLocaleDateString()}
+                      </p>
 
-                <p>
-                  <strong>To:</strong>{" "}
-                  {new Date(booking.dateTo).toLocaleDateString()}
-                </p>
+                      <p>
+                        <strong>To:</strong>{" "}
+                        {new Date(booking.dateTo).toLocaleDateString()}
+                      </p>
 
-                <p>
-                  <strong>Guests:</strong> {booking.guests}
-                </p>
+                      <p>
+                        <strong>Guests:</strong> {booking.guests}
+                      </p>
+                    </div>
 
-                {booking.venue?.id && (
-                  <Link
-                    to={`/venues/${booking.venue.id}`}
-                    className="mt-2 inline-block underline"
-                  >
-                    View venue
-                  </Link>
-                )}
+                    {booking.venue?.id && (
+                      <Link
+                        to={`/venues/${booking.venue.id}`}
+                        className="mt-4 inline-block font-semibold text-[#174e4f] underline"
+                      >
+                        View venue
+                      </Link>
+                    )}
+                  </div>
+
+                  {booking.venue?.media?.[0]?.url ? (
+                    <img
+                      src={booking.venue.media[0].url}
+                      alt={
+                        booking.venue.media[0].alt ||
+                        booking.venue.name ||
+                        "Booked venue"
+                      }
+                      className="h-32 w-full rounded-2xl object-cover sm:w-44"
+                    />
+                  ) : (
+                    <div className="flex h-32 w-full items-center justify-center rounded-2xl bg-stone-200 text-sm text-stone-500 sm:w-44">
+                      No image
+                    </div>
+                  )}
+                </div>
               </li>
             ))}
           </ul>
         ) : (
-          <p className="text-stone-600">
+          <p className="rounded-2xl bg-[#fffaf3] p-5 text-stone-600">
             You do not have any upcoming bookings yet.
           </p>
         )}

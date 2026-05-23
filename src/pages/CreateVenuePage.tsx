@@ -23,11 +23,16 @@ function CreateVenuePage() {
     pets: false,
   });
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [errorMessage, setErrorMessage] = useState("");
+  const [isSubmitting, setIsSubmitting] =
+    useState(false);
+
+  const [errorMessage, setErrorMessage] =
+    useState("");
 
   function handleChange(
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    event: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement
+    >,
   ) {
     const { name, value } = event.target;
 
@@ -47,7 +52,10 @@ function CreateVenuePage() {
 
     let nextValue: string | number = value;
 
-    if (name === "price" || name === "maxGuests") {
+    if (
+      name === "price" ||
+      name === "maxGuests"
+    ) {
       nextValue = Number(value);
     }
 
@@ -57,21 +65,32 @@ function CreateVenuePage() {
     }));
   }
 
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(
+    event: React.FormEvent<HTMLFormElement>,
+  ) {
     event.preventDefault();
 
     if (!isLoggedIn || !user?.venueManager) {
-      setErrorMessage("Only venue managers can create venues.");
+      setErrorMessage(
+        "Only venue managers can create venues.",
+      );
+
       return;
     }
 
     if (formData.price < 1) {
-      setErrorMessage("Price must be at least 1.");
+      setErrorMessage(
+        "Price must be at least 1.",
+      );
+
       return;
     }
 
     if (formData.maxGuests < 1) {
-      setErrorMessage("Max guests must be at least 1.");
+      setErrorMessage(
+        "Max guests must be at least 1.",
+      );
+
       return;
     }
 
@@ -79,7 +98,9 @@ function CreateVenuePage() {
       ? [
           {
             url: formData.imageUrl,
-            alt: formData.imageAlt || formData.name,
+            alt:
+              formData.imageAlt ||
+              formData.name,
           },
         ]
       : [];
@@ -94,12 +115,14 @@ function CreateVenuePage() {
         price: formData.price,
         maxGuests: formData.maxGuests,
         media,
+
         meta: {
           wifi: formData.wifi,
           parking: formData.parking,
           breakfast: formData.breakfast,
           pets: formData.pets,
         },
+
         location: {
           city: formData.city,
           country: formData.country,
@@ -118,192 +141,308 @@ function CreateVenuePage() {
 
   if (!isLoggedIn) {
     return (
-      <section className="p-6">
-        <h1 className="text-3xl font-bold">Create venue</h1>
+      <section className="mx-auto flex min-h-[calc(100vh-90px)] max-w-6xl items-center px-6 py-10">
+        <div className="w-full rounded-3xl bg-white p-10 shadow-sm">
+          <div className="rounded-3xl bg-[#174e4f] px-8 py-10 text-white">
+            <p className="mb-2 text-sm font-semibold uppercase tracking-[0.2em] text-[#f6d7c3]">
+              Manager access
+            </p>
 
-        <p className="mt-4">
-          You need to{" "}
-          <Link to="/login" className="underline">
-            log in
-          </Link>{" "}
-          as a venue manager.
-        </p>
+            <h1 className="text-5xl font-extrabold leading-tight">
+              Create your next venue
+            </h1>
+
+            <p className="mt-4 max-w-2xl text-lg text-stone-100">
+              Log in as a venue manager to create and manage listings on Holidaze.
+            </p>
+
+            <Link
+              to="/login"
+              className="mt-6 inline-block rounded-2xl bg-white px-5 py-3 font-semibold text-[#174e4f]! transition hover:bg-stone-100"
+            >
+              Log in
+            </Link>
+          </div>
+        </div>
       </section>
     );
   }
 
   if (!user?.venueManager) {
     return (
-      <section className="p-6">
-        <h1 className="text-3xl font-bold">Create venue</h1>
+      <section className="mx-auto flex min-h-[calc(100vh-90px)] max-w-6xl items-center px-6 py-10">
+        <div className="w-full rounded-3xl bg-white p-10 shadow-sm">
+          <div className="rounded-3xl bg-[#174e4f] px-8 py-10 text-white">
+            <p className="mb-2 text-sm font-semibold uppercase tracking-[0.2em] text-[#f6d7c3]">
+              Restricted access
+            </p>
 
-        <p className="mt-4">Only venue managers can create venues.</p>
+            <h1 className="text-5xl font-extrabold leading-tight">
+              Venue managers only
+            </h1>
+
+            <p className="mt-4 max-w-2xl text-lg text-stone-100">
+              Only venue managers can create listings and manage venues.
+            </p>
+
+            <Link
+              to="/profile"
+              className="mt-6 inline-block rounded-2xl bg-white px-5 py-3 font-semibold text-[#174e4f]! transition hover:bg-stone-100"
+            >
+              Go to profile
+            </Link>
+          </div>
+        </div>
       </section>
     );
   }
 
   return (
-    <section className="mx-auto max-w-3xl p-6">
-      <Link to="/manager" className="mb-6 inline-block text-sm underline">
+    <section className="mx-auto max-w-5xl px-6 py-10">
+      <Link
+        to="/manager"
+        className="mb-6 inline-block text-sm font-medium text-[#174e4f] underline"
+      >
         Back to dashboard
       </Link>
 
-      <h1 className="text-3xl font-bold">Create venue</h1>
+      <div className="mb-10 rounded-3xl bg-[#174e4f] px-8 py-10 text-white shadow-lg">
+        <p className="mb-2 text-sm font-semibold uppercase tracking-[0.2em] text-[#f6d7c3]">
+          Venue creation
+        </p>
 
-      <form onSubmit={handleSubmit} className="mt-6 space-y-4">
-        <div>
-          <label className="mb-1 block font-medium">Venue name</label>
-          <input
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            required
-            className="w-full rounded border p-3"
-          />
-        </div>
+        <h1 className="text-5xl font-extrabold leading-tight">
+          Create a new venue
+        </h1>
 
-        <div>
-          <label className="mb-1 block font-medium">Description</label>
-          <textarea
-            name="description"
-            value={formData.description}
-            onChange={handleChange}
-            required
-            rows={5}
-            className="w-full rounded border p-3"
-          />
-        </div>
+        <p className="mt-4 max-w-2xl text-lg text-stone-100">
+          Add a new holiday destination for customers to discover and book through Holidaze.
+        </p>
+      </div>
 
-        <div className="grid gap-4 md:grid-cols-2">
-          <div>
-            <label className="mb-1 block font-medium">Price per night</label>
-            <input
-              type="number"
-              name="price"
-              min={1}
-              value={formData.price}
-              onChange={handleChange}
-              required
-              className="w-full rounded border p-3"
-            />
-          </div>
+      <form
+        onSubmit={handleSubmit}
+        className="space-y-6"
+      >
+        <div className="rounded-3xl bg-white p-6 shadow-sm">
+          <h2 className="mb-5 text-2xl font-bold text-stone-800">
+            Basic information
+          </h2>
 
-          <div>
-            <label className="mb-1 block font-medium">Max guests</label>
-            <input
-              type="number"
-              name="maxGuests"
-              min={1}
-              value={formData.maxGuests}
-              onChange={handleChange}
-              required
-              className="w-full rounded border p-3"
-            />
-          </div>
-        </div>
+          <div className="space-y-5">
+            <div>
+              <label className="mb-2 block font-semibold text-stone-700">
+                Venue name
+              </label>
 
-        <div>
-          <label className="mb-1 block font-medium">Image URL</label>
-          <input
-            type="url"
-            name="imageUrl"
-            value={formData.imageUrl}
-            onChange={handleChange}
-            placeholder="https://example.com/image.jpg"
-            className="w-full rounded border p-3"
-          />
-        </div>
+              <input
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                required
+                className="w-full rounded-2xl border border-stone-300 bg-stone-50 p-3 outline-none transition focus:border-[#174e4f]"
+              />
+            </div>
 
-        <div>
-          <label className="mb-1 block font-medium">Image alt text</label>
-          <input
-            type="text"
-            name="imageAlt"
-            value={formData.imageAlt}
-            onChange={handleChange}
-            className="w-full rounded border p-3"
-          />
-        </div>
+            <div>
+              <label className="mb-2 block font-semibold text-stone-700">
+                Description
+              </label>
 
-        <div className="grid gap-4 md:grid-cols-2">
-          <div>
-            <label className="mb-1 block font-medium">City</label>
-            <input
-              type="text"
-              name="city"
-              value={formData.city}
-              onChange={handleChange}
-              className="w-full rounded border p-3"
-            />
-          </div>
+              <textarea
+                name="description"
+                value={formData.description}
+                onChange={handleChange}
+                required
+                rows={5}
+                className="w-full rounded-2xl border border-stone-300 bg-stone-50 p-3 outline-none transition focus:border-[#174e4f]"
+              />
+            </div>
 
-          <div>
-            <label className="mb-1 block font-medium">Country</label>
-            <input
-              type="text"
-              name="country"
-              value={formData.country}
-              onChange={handleChange}
-              className="w-full rounded border p-3"
-            />
+            <div className="grid gap-5 md:grid-cols-2">
+              <div>
+                <label className="mb-2 block font-semibold text-stone-700">
+                  Price per night
+                </label>
+
+                <input
+                  type="number"
+                  name="price"
+                  min={1}
+                  value={formData.price}
+                  onChange={handleChange}
+                  required
+                  className="w-full rounded-2xl border border-stone-300 bg-stone-50 p-3 outline-none transition focus:border-[#174e4f]"
+                />
+              </div>
+
+              <div>
+                <label className="mb-2 block font-semibold text-stone-700">
+                  Max guests
+                </label>
+
+                <input
+                  type="number"
+                  name="maxGuests"
+                  min={1}
+                  value={formData.maxGuests}
+                  onChange={handleChange}
+                  required
+                  className="w-full rounded-2xl border border-stone-300 bg-stone-50 p-3 outline-none transition focus:border-[#174e4f]"
+                />
+              </div>
+            </div>
           </div>
         </div>
 
-        <fieldset className="rounded border bg-white p-4">
-          <legend className="font-medium">Amenities</legend>
+        <div className="rounded-3xl bg-white p-6 shadow-sm">
+          <h2 className="mb-5 text-2xl font-bold text-stone-800">
+            Venue media
+          </h2>
 
-          <div className="mt-3 grid gap-2 md:grid-cols-2">
-            <label className="flex items-center gap-2">
+          <div className="space-y-5">
+            <div>
+              <label className="mb-2 block font-semibold text-stone-700">
+                Image URL
+              </label>
+
+              <input
+                type="url"
+                name="imageUrl"
+                value={formData.imageUrl}
+                onChange={handleChange}
+                placeholder="https://example.com/image.jpg"
+                className="w-full rounded-2xl border border-stone-300 bg-stone-50 p-3 outline-none transition focus:border-[#174e4f]"
+              />
+            </div>
+
+            <div>
+              <label className="mb-2 block font-semibold text-stone-700">
+                Image alt text
+              </label>
+
+              <input
+                type="text"
+                name="imageAlt"
+                value={formData.imageAlt}
+                onChange={handleChange}
+                className="w-full rounded-2xl border border-stone-300 bg-stone-50 p-3 outline-none transition focus:border-[#174e4f]"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="rounded-3xl bg-white p-6 shadow-sm">
+          <h2 className="mb-5 text-2xl font-bold text-stone-800">
+            Location
+          </h2>
+
+          <div className="grid gap-5 md:grid-cols-2">
+            <div>
+              <label className="mb-2 block font-semibold text-stone-700">
+                City
+              </label>
+
+              <input
+                type="text"
+                name="city"
+                value={formData.city}
+                onChange={handleChange}
+                className="w-full rounded-2xl border border-stone-300 bg-stone-50 p-3 outline-none transition focus:border-[#174e4f]"
+              />
+            </div>
+
+            <div>
+              <label className="mb-2 block font-semibold text-stone-700">
+                Country
+              </label>
+
+              <input
+                type="text"
+                name="country"
+                value={formData.country}
+                onChange={handleChange}
+                className="w-full rounded-2xl border border-stone-300 bg-stone-50 p-3 outline-none transition focus:border-[#174e4f]"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="rounded-3xl bg-white p-6 shadow-sm">
+          <h2 className="mb-5 text-2xl font-bold text-stone-800">
+            Amenities
+          </h2>
+
+          <div className="grid gap-4 md:grid-cols-2">
+            <label className="flex items-center gap-3 rounded-2xl bg-[#fffaf3] p-4">
               <input
                 type="checkbox"
                 name="wifi"
                 checked={formData.wifi}
                 onChange={handleChange}
               />
-              Wifi
+
+              <span className="font-medium text-stone-700">
+                Wifi
+              </span>
             </label>
 
-            <label className="flex items-center gap-2">
+            <label className="flex items-center gap-3 rounded-2xl bg-[#fffaf3] p-4">
               <input
                 type="checkbox"
                 name="parking"
                 checked={formData.parking}
                 onChange={handleChange}
               />
-              Parking
+
+              <span className="font-medium text-stone-700">
+                Parking
+              </span>
             </label>
 
-            <label className="flex items-center gap-2">
+            <label className="flex items-center gap-3 rounded-2xl bg-[#fffaf3] p-4">
               <input
                 type="checkbox"
                 name="breakfast"
                 checked={formData.breakfast}
                 onChange={handleChange}
               />
-              Breakfast
+
+              <span className="font-medium text-stone-700">
+                Breakfast
+              </span>
             </label>
 
-            <label className="flex items-center gap-2">
+            <label className="flex items-center gap-3 rounded-2xl bg-[#fffaf3] p-4">
               <input
                 type="checkbox"
                 name="pets"
                 checked={formData.pets}
                 onChange={handleChange}
               />
-              Pets allowed
+
+              <span className="font-medium text-stone-700">
+                Pets allowed
+              </span>
             </label>
           </div>
-        </fieldset>
+        </div>
 
-        {errorMessage && <p className="text-red-600">{errorMessage}</p>}
+        {errorMessage && (
+          <p className="rounded-2xl border border-red-200 bg-red-50 p-4 text-red-600">
+            {errorMessage}
+          </p>
+        )}
 
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full rounded bg-stone-900 p-3 text-white"
+          className="w-full rounded-2xl bg-[#174e4f] p-4 text-lg font-semibold text-white! transition hover:bg-[#123b3c]"
         >
-          {isSubmitting ? "Creating venue..." : "Create venue"}
+          {isSubmitting
+            ? "Creating venue..."
+            : "Create venue"}
         </button>
       </form>
     </section>

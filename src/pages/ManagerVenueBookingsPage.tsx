@@ -24,7 +24,6 @@ function ManagerVenueBookingsPage() {
       try {
         const response = await getVenueById(id);
 
-        // Fetching the full venue here should keep the bookings data in one request
         setVenue(response.data);
       } catch {
         setErrorMessage("Could not load the bookings for this venue.");
@@ -38,28 +37,58 @@ function ManagerVenueBookingsPage() {
 
   if (!isLoggedIn) {
     return (
-      <section className="p-6">
-        <h1 className="text-3xl font-bold">Venue bookings</h1>
+      <section className="mx-auto flex min-h-[calc(100vh-90px)] max-w-6xl items-center px-6 py-10">
+        <div className="w-full rounded-3xl bg-white p-10 shadow-sm">
+          <div className="rounded-3xl bg-[#174e4f] px-8 py-10 text-white">
+            <p className="mb-2 text-sm font-semibold uppercase tracking-[0.2em] text-[#f6d7c3]">
+              Manager access
+            </p>
 
-        <p className="mt-4">
-          You need to{" "}
-          <Link to="/login" className="underline">
-            log in
-          </Link>{" "}
-          as a venue manager.
-        </p>
+            <h1 className="text-5xl font-extrabold leading-tight">
+              Venue bookings
+            </h1>
+
+            <p className="mt-4 max-w-2xl text-lg text-stone-100">
+              Log in as a venue manager to view bookings for your listings.
+            </p>
+
+            <Link
+              to="/login"
+              className="mt-6 inline-block rounded-2xl bg-white px-5 py-3 font-semibold text-[#174e4f]! transition hover:bg-stone-100"
+            >
+              Log in
+            </Link>
+          </div>
+        </div>
       </section>
     );
   }
 
   if (!user?.venueManager) {
     return (
-      <section className="p-6">
-        <h1 className="text-3xl font-bold">Venue bookings</h1>
+      <section className="mx-auto flex min-h-[calc(100vh-90px)] max-w-6xl items-center px-6 py-10">
+        <div className="w-full rounded-3xl bg-white p-10 shadow-sm">
+          <div className="rounded-3xl bg-[#174e4f] px-8 py-10 text-white">
+            <p className="mb-2 text-sm font-semibold uppercase tracking-[0.2em] text-[#f6d7c3]">
+              Restricted access
+            </p>
 
-        <p className="mt-4">
-          This page is only available for venue managers.
-        </p>
+            <h1 className="text-5xl font-extrabold leading-tight">
+              Venue managers only
+            </h1>
+
+            <p className="mt-4 max-w-2xl text-lg text-stone-100">
+              This page is only available for venue managers.
+            </p>
+
+            <Link
+              to="/profile"
+              className="mt-6 inline-block rounded-2xl bg-white px-5 py-3 font-semibold text-[#174e4f]! transition hover:bg-stone-100"
+            >
+              Go to profile
+            </Link>
+          </div>
+        </div>
       </section>
     );
   }
@@ -77,37 +106,66 @@ function ManagerVenueBookingsPage() {
   }
 
   return (
-    <section className="mx-auto max-w-4xl p-6">
-      <Link to="/manager" className="mb-6 inline-block text-sm underline">
+    <section className="mx-auto max-w-6xl px-6 py-10">
+      <Link
+        to="/manager"
+        className="mb-6 inline-block text-sm font-medium text-[#174e4f] underline"
+      >
         Back to dashboard
       </Link>
 
-      <h1 className="text-3xl font-bold">Bookings for {venue.name}</h1>
+      <div className="mb-10 rounded-3xl bg-[#174e4f] px-8 py-10 text-white shadow-lg">
+        <p className="mb-2 text-sm font-semibold uppercase tracking-[0.2em] text-[#f6d7c3]">
+          Venue bookings
+        </p>
+
+        <h1 className="text-5xl font-extrabold leading-tight">
+          {venue.name}
+        </h1>
+
+        <p className="mt-4 max-w-2xl text-lg text-stone-100">
+          View booking dates and guest counts for this venue.
+        </p>
+      </div>
 
       {venue.bookings && venue.bookings.length > 0 ? (
-        <ul className="mt-6 space-y-3">
+        <ul className="space-y-4">
           {venue.bookings.map((booking) => (
-            <li key={booking.id} className="rounded border bg-white p-4">
-              <p>
-                <strong>From:</strong>{" "}
-                {new Date(booking.dateFrom).toLocaleDateString()}
-              </p>
+            <li
+              key={booking.id}
+              className="rounded-3xl bg-white p-6 shadow-sm"
+            >
+              <div className="grid gap-4 md:grid-cols-3">
+                <div className="rounded-2xl bg-[#fffaf3] p-4">
+                  <p className="text-sm text-stone-500">From</p>
+                  <p className="mt-1 font-semibold text-stone-800">
+                    {new Date(booking.dateFrom).toLocaleDateString()}
+                  </p>
+                </div>
 
-              <p>
-                <strong>To:</strong>{" "}
-                {new Date(booking.dateTo).toLocaleDateString()}
-              </p>
+                <div className="rounded-2xl bg-[#fffaf3] p-4">
+                  <p className="text-sm text-stone-500">To</p>
+                  <p className="mt-1 font-semibold text-stone-800">
+                    {new Date(booking.dateTo).toLocaleDateString()}
+                  </p>
+                </div>
 
-              <p>
-                <strong>Guests:</strong> {booking.guests}
-              </p>
+                <div className="rounded-2xl bg-[#fffaf3] p-4">
+                  <p className="text-sm text-stone-500">Guests</p>
+                  <p className="mt-1 font-semibold text-stone-800">
+                    {booking.guests}
+                  </p>
+                </div>
+              </div>
             </li>
           ))}
         </ul>
       ) : (
-        <p className="mt-6 rounded border bg-white p-4 text-stone-600">
-          This venue does not have any bookings yet.
-        </p>
+        <div className="rounded-3xl bg-white p-8 shadow-sm">
+          <p className="text-stone-600">
+            This venue does not have any bookings yet.
+          </p>
+        </div>
       )}
     </section>
   );

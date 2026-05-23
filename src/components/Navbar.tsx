@@ -71,7 +71,7 @@ function Navbar() {
 
               <Link
                 to="/register"
-                className="rounded bg-[#174e4f] px-5 py-2.5 text-white transition hover:bg-[#123b3c]"
+                className="rounded bg-[#174e4f] px-5 py-2.5 text-white! transition hover:bg-[#123b3c]"
               >
                 Register
               </Link>
@@ -80,7 +80,7 @@ function Navbar() {
             <button
               type="button"
               onClick={logout}
-              className="rounded bg-[#174e4f] px-5 py-2.5 text-white transition hover:bg-[#123b3c]"
+              className="rounded bg-[#174e4f] px-5 py-2.5 text-white! transition hover:bg-[#123b3c]"
             >
               Logout
             </button>
@@ -129,7 +129,7 @@ function Navbar() {
                 <Link
                   to="/register"
                   onClick={closeMobileMenu}
-                  className="w-fit rounded bg-[#174e4f] px-5 py-2.5 text-white"
+                  className="w-fit rounded bg-[#174e4f] px-5 py-2.5 text-white!"
                 >
                   Register
                 </Link>
@@ -141,7 +141,7 @@ function Navbar() {
                   logout();
                   closeMobileMenu();
                 }}
-                className="w-fit rounded bg-[#174e4f] px-5 py-2.5 text-left text-white"
+                className="w-fit rounded bg-[#174e4f] px-5 py-2.5 text-left text-white!"
               >
                 Logout
               </button>

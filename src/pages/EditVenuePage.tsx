@@ -235,36 +235,58 @@ function EditVenuePage() {
 
   if (!isLoggedIn) {
     return (
-      <section className="p-6">
-        <h1 className="text-3xl font-bold">
-          Edit venue
-        </h1>
+      <section className="mx-auto flex min-h-[calc(100vh-90px)] max-w-6xl items-center px-6 py-10">
+        <div className="w-full rounded-3xl bg-white p-10 shadow-sm">
+          <div className="rounded-3xl bg-[#174e4f] px-8 py-10 text-white">
+            <p className="mb-2 text-sm font-semibold uppercase tracking-[0.2em] text-[#f6d7c3]">
+              Manager access
+            </p>
 
-        <p className="mt-4">
-          You need to{" "}
-          <Link
-            to="/login"
-            className="underline"
-          >
-            log in
-          </Link>{" "}
-          as a venue manager.
-        </p>
+            <h1 className="text-5xl font-extrabold leading-tight">
+              Edit your venue
+            </h1>
+
+            <p className="mt-4 max-w-2xl text-lg text-stone-100">
+              Log in as a venue manager to edit and manage your Holidaze listings.
+            </p>
+
+            <Link
+              to="/login"
+              className="mt-6 inline-block rounded-2xl bg-white px-5 py-3 font-semibold text-[#174e4f]! transition hover:bg-stone-100"
+            >
+              Log in
+            </Link>
+          </div>
+        </div>
       </section>
     );
   }
 
   if (!user?.venueManager) {
     return (
-      <section className="p-6">
-        <h1 className="text-3xl font-bold">
-          Edit venue
-        </h1>
+      <section className="mx-auto flex min-h-[calc(100vh-90px)] max-w-6xl items-center px-6 py-10">
+        <div className="w-full rounded-3xl bg-white p-10 shadow-sm">
+          <div className="rounded-3xl bg-[#174e4f] px-8 py-10 text-white">
+            <p className="mb-2 text-sm font-semibold uppercase tracking-[0.2em] text-[#f6d7c3]">
+              Restricted access
+            </p>
 
-        <p className="mt-4">
-          Only venue managers can edit
-          venues.
-        </p>
+            <h1 className="text-5xl font-extrabold leading-tight">
+              Venue managers only
+            </h1>
+
+            <p className="mt-4 max-w-2xl text-lg text-stone-100">
+              Only venue managers can edit venue listings.
+            </p>
+
+            <Link
+              to="/profile"
+              className="mt-6 inline-block rounded-2xl bg-white px-5 py-3 font-semibold text-[#174e4f]! transition hover:bg-stone-100"
+            >
+              Go to profile
+            </Link>
+          </div>
+        </div>
       </section>
     );
   }
@@ -286,196 +308,238 @@ function EditVenuePage() {
   }
 
   return (
-    <section className="mx-auto max-w-3xl p-6">
+    <section className="mx-auto max-w-5xl px-6 py-10">
       <Link
         to="/manager"
-        className="mb-6 inline-block text-sm underline"
+        className="mb-6 inline-block text-sm font-medium text-[#174e4f] underline"
       >
         Back to dashboard
       </Link>
 
-      <h1 className="text-3xl font-bold">
-        Edit venue
-      </h1>
+      <div className="mb-10 rounded-3xl bg-[#174e4f] px-8 py-10 text-white shadow-lg">
+        <p className="mb-2 text-sm font-semibold uppercase tracking-[0.2em] text-[#f6d7c3]">
+          Venue editing
+        </p>
+
+        <h1 className="text-5xl font-extrabold leading-tight">
+          Edit venue
+        </h1>
+
+        <p className="mt-4 max-w-2xl text-lg text-stone-100">
+          Update your venue information, amenities and media to keep your listing fresh and attractive.
+        </p>
+      </div>
 
       <form
         onSubmit={handleSubmit}
-        className="mt-6 space-y-4"
+        className="space-y-6"
       >
-        <div>
-          <label className="mb-1 block font-medium">
-            Venue name
-          </label>
+        <div className="rounded-3xl bg-white p-6 shadow-sm">
+          <h2 className="mb-5 text-2xl font-bold text-stone-800">
+            Basic information
+          </h2>
 
-          <input
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            required
-            className="w-full rounded border p-3"
-          />
-        </div>
+          <div className="space-y-5">
+            <div>
+              <label className="mb-2 block font-semibold text-stone-700">
+                Venue name
+              </label>
 
-        <div>
-          <label className="mb-1 block font-medium">
-            Description
-          </label>
+              <input
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
+                required
+                className="w-full rounded-2xl border border-stone-300 bg-stone-50 p-3 outline-none transition focus:border-[#174e4f]"
+              />
+            </div>
 
-          <textarea
-            name="description"
-            value={formData.description}
-            onChange={handleChange}
-            required
-            rows={5}
-            className="w-full rounded border p-3"
-          />
-        </div>
+            <div>
+              <label className="mb-2 block font-semibold text-stone-700">
+                Description
+              </label>
 
-        <div className="grid gap-4 md:grid-cols-2">
-          <div>
-            <label className="mb-1 block font-medium">
-              Price per night
-            </label>
+              <textarea
+                name="description"
+                value={formData.description}
+                onChange={handleChange}
+                required
+                rows={5}
+                className="w-full rounded-2xl border border-stone-300 bg-stone-50 p-3 outline-none transition focus:border-[#174e4f]"
+              />
+            </div>
 
-            <input
-              type="number"
-              name="price"
-              min={1}
-              value={formData.price}
-              onChange={handleChange}
-              required
-              className="w-full rounded border p-3"
-            />
-          </div>
+            <div className="grid gap-5 md:grid-cols-2">
+              <div>
+                <label className="mb-2 block font-semibold text-stone-700">
+                  Price per night
+                </label>
 
-          <div>
-            <label className="mb-1 block font-medium">
-              Max guests
-            </label>
+                <input
+                  type="number"
+                  name="price"
+                  min={1}
+                  value={formData.price}
+                  onChange={handleChange}
+                  required
+                  className="w-full rounded-2xl border border-stone-300 bg-stone-50 p-3 outline-none transition focus:border-[#174e4f]"
+                />
+              </div>
 
-            <input
-              type="number"
-              name="maxGuests"
-              min={1}
-              value={formData.maxGuests}
-              onChange={handleChange}
-              required
-              className="w-full rounded border p-3"
-            />
-          </div>
-        </div>
+              <div>
+                <label className="mb-2 block font-semibold text-stone-700">
+                  Max guests
+                </label>
 
-        <div>
-          <label className="mb-1 block font-medium">
-            Image URL
-          </label>
-
-          <input
-            type="url"
-            name="imageUrl"
-            value={formData.imageUrl}
-            onChange={handleChange}
-            className="w-full rounded border p-3"
-          />
-        </div>
-
-        <div>
-          <label className="mb-1 block font-medium">
-            Image alt text
-          </label>
-
-          <input
-            type="text"
-            name="imageAlt"
-            value={formData.imageAlt}
-            onChange={handleChange}
-            className="w-full rounded border p-3"
-          />
-        </div>
-
-        <div className="grid gap-4 md:grid-cols-2">
-          <div>
-            <label className="mb-1 block font-medium">
-              City
-            </label>
-
-            <input
-              type="text"
-              name="city"
-              value={formData.city}
-              onChange={handleChange}
-              className="w-full rounded border p-3"
-            />
-          </div>
-
-          <div>
-            <label className="mb-1 block font-medium">
-              Country
-            </label>
-
-            <input
-              type="text"
-              name="country"
-              value={formData.country}
-              onChange={handleChange}
-              className="w-full rounded border p-3"
-            />
+                <input
+                  type="number"
+                  name="maxGuests"
+                  min={1}
+                  value={formData.maxGuests}
+                  onChange={handleChange}
+                  required
+                  className="w-full rounded-2xl border border-stone-300 bg-stone-50 p-3 outline-none transition focus:border-[#174e4f]"
+                />
+              </div>
+            </div>
           </div>
         </div>
 
-        <fieldset className="rounded border bg-white p-4">
-          <legend className="font-medium">
+        <div className="rounded-3xl bg-white p-6 shadow-sm">
+          <h2 className="mb-5 text-2xl font-bold text-stone-800">
+            Venue media
+          </h2>
+
+          <div className="space-y-5">
+            <div>
+              <label className="mb-2 block font-semibold text-stone-700">
+                Image URL
+              </label>
+
+              <input
+                type="url"
+                name="imageUrl"
+                value={formData.imageUrl}
+                onChange={handleChange}
+                className="w-full rounded-2xl border border-stone-300 bg-stone-50 p-3 outline-none transition focus:border-[#174e4f]"
+              />
+            </div>
+
+            <div>
+              <label className="mb-2 block font-semibold text-stone-700">
+                Image alt text
+              </label>
+
+              <input
+                type="text"
+                name="imageAlt"
+                value={formData.imageAlt}
+                onChange={handleChange}
+                className="w-full rounded-2xl border border-stone-300 bg-stone-50 p-3 outline-none transition focus:border-[#174e4f]"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="rounded-3xl bg-white p-6 shadow-sm">
+          <h2 className="mb-5 text-2xl font-bold text-stone-800">
+            Location
+          </h2>
+
+          <div className="grid gap-5 md:grid-cols-2">
+            <div>
+              <label className="mb-2 block font-semibold text-stone-700">
+                City
+              </label>
+
+              <input
+                type="text"
+                name="city"
+                value={formData.city}
+                onChange={handleChange}
+                className="w-full rounded-2xl border border-stone-300 bg-stone-50 p-3 outline-none transition focus:border-[#174e4f]"
+              />
+            </div>
+
+            <div>
+              <label className="mb-2 block font-semibold text-stone-700">
+                Country
+              </label>
+
+              <input
+                type="text"
+                name="country"
+                value={formData.country}
+                onChange={handleChange}
+                className="w-full rounded-2xl border border-stone-300 bg-stone-50 p-3 outline-none transition focus:border-[#174e4f]"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div className="rounded-3xl bg-white p-6 shadow-sm">
+          <h2 className="mb-5 text-2xl font-bold text-stone-800">
             Amenities
-          </legend>
+          </h2>
 
-          <div className="mt-3 grid gap-2 md:grid-cols-2">
-            <label className="flex items-center gap-2">
+          <div className="grid gap-4 md:grid-cols-2">
+            <label className="flex items-center gap-3 rounded-2xl bg-[#fffaf3] p-4">
               <input
                 type="checkbox"
                 name="wifi"
                 checked={formData.wifi}
                 onChange={handleChange}
               />
-              Wifi
+
+              <span className="font-medium text-stone-700">
+                Wifi
+              </span>
             </label>
 
-            <label className="flex items-center gap-2">
+            <label className="flex items-center gap-3 rounded-2xl bg-[#fffaf3] p-4">
               <input
                 type="checkbox"
                 name="parking"
                 checked={formData.parking}
                 onChange={handleChange}
               />
-              Parking
+
+              <span className="font-medium text-stone-700">
+                Parking
+              </span>
             </label>
 
-            <label className="flex items-center gap-2">
+            <label className="flex items-center gap-3 rounded-2xl bg-[#fffaf3] p-4">
               <input
                 type="checkbox"
                 name="breakfast"
-                checked={
-                  formData.breakfast
-                }
+                checked={formData.breakfast}
                 onChange={handleChange}
               />
-              Breakfast
+
+              <span className="font-medium text-stone-700">
+                Breakfast
+              </span>
             </label>
 
-            <label className="flex items-center gap-2">
+            <label className="flex items-center gap-3 rounded-2xl bg-[#fffaf3] p-4">
               <input
                 type="checkbox"
                 name="pets"
                 checked={formData.pets}
                 onChange={handleChange}
               />
-              Pets allowed
+
+              <span className="font-medium text-stone-700">
+                Pets allowed
+              </span>
             </label>
           </div>
-        </fieldset>
+        </div>
 
         {errorMessage && (
-          <p className="text-red-600">
+          <p className="rounded-2xl border border-red-200 bg-red-50 p-4 text-red-600">
             {errorMessage}
           </p>
         )}
@@ -483,7 +547,7 @@ function EditVenuePage() {
         <button
           type="submit"
           disabled={isSubmitting}
-          className="w-full rounded bg-stone-900 p-3 text-white"
+          className="w-full rounded-2xl bg-[#174e4f] p-4 text-lg font-semibold text-white! transition hover:bg-[#123b3c]"
         >
           {isSubmitting
             ? "Saving changes..."
