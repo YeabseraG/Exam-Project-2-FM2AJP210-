@@ -1,3 +1,5 @@
+import type { Venue } from "./venue";
+
 export interface CreateBookingPayload {
   dateFrom: string;
   dateTo: string;
@@ -12,4 +14,6 @@ export interface Booking {
   guests: number;
   created: string;
   updated: string;
+
+  venue?: Venue;
 }
