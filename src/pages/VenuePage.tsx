@@ -23,7 +23,9 @@ function VenuePage() {
         const response = await getVenueById(id);
         setVenue(response.data);
       } catch {
-        setError("Could not load this venue right now, Refresh page or try again later.");
+        setError(
+          "Could not load this venue right now. Refresh the page or try again later.",
+        );
       } finally {
         setLoading(false);
       }
@@ -43,6 +45,13 @@ function VenuePage() {
   if (!venue) {
     return <p className="p-6">Venue not found.</p>;
   }
+
+  const amenities = [
+    { label: "Wifi", available: venue.meta?.wifi },
+    { label: "Parking", available: venue.meta?.parking },
+    { label: "Breakfast", available: venue.meta?.breakfast },
+    { label: "Pets allowed", available: venue.meta?.pets },
+  ];
 
   return (
     <section className="mx-auto max-w-5xl p-6">
@@ -85,6 +94,23 @@ function VenuePage() {
         </div>
 
         <div className="rounded border bg-white p-4">
+          <h2 className="mb-3 text-xl font-bold">Amenities</h2>
+
+          <ul className="grid gap-2 text-sm">
+            {amenities.map((amenity) => (
+              <li
+                key={amenity.label}
+                className={
+                  amenity.available ? "text-stone-900" : "text-stone-400"
+                }
+              >
+                {amenity.available ? "✓" : "—"} {amenity.label}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        <div className="rounded border bg-white p-4 md:col-span-2">
           <h2 className="mb-3 text-xl font-bold">Availability preview</h2>
 
           {venue.bookings && venue.bookings.length > 0 ? (
